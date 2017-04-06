@@ -1,10 +1,51 @@
-import socket,threading,sys
-from random import randrange 
+import socket
+import threading
+import sys
+import time
+import os
+from random import randrange
+
+
+def clearscreen():
+    try:
+        os.system('clear')
+    except:
+        os.system('cls')
 
 # set variable
+for flash in range(3):
+    print('     ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+    print('     ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+    print('     ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+    time.sleep(0.3)
+    clearscreen()
+    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+    print('      ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+    print('    ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+    print('      ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+    time.sleep(0.05)
+    clearscreen()
+    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+    print('      ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+    print('    ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+    time.sleep(0.05)
+    clearscreen()
+
+
 turn_count = 0
 name_possible = [i for i in'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
-player = '' 
+player = ''
 bot = ''
 cursed = ''
 contorled = ''
@@ -17,63 +58,67 @@ map_size = 9
 in_turn = False
 processing = True
 acting = 0
-deck = [i for i in 'K'*14 + 'C'*4 + '123456789'*2 + 'D'*7 + 'U'*3 + 'H'*5 + 'R'*1]
+deck = [i for i in 'K' * 14 + 'C' * 4 + '123456789' *
+        2 + 'D' * 7 + 'U' * 3 + 'H' * 5 + 'R' * 1]
 card_used = []
-card_name = {'K':'[K]ill.','C':'[C]hain kill.','R':'[R]eset deck.'
-                ,'1':'detect[1].','2':'detect[2].','3':'detect[3].'
-                ,'4':'detect[4].','5':'detect[5].','6':'detect[6].'
-                ,'7':'detect[7].','8':'detect[8].','9':'detect[9].'
-                ,'D':'[D]ouble draw','U':'[U]ncursed.','H':'[H]istory'}
+card_name = {'K': '[K]ill.', 'C': '[C]hain kill.', 'R': '[R]eset deck.', '1': 'Detect[1].', '2': 'Detect[2].', '3': 'Detect[3].', '4': 'Detect[4].',
+             '5': 'Detect[5].', '6': 'Detect[6].', '7': 'Detect[7].', '8': 'Detect[8].', '9': 'Detect[9].', 'D': '[D]ouble draw', 'U': '[U]ncursed.', 'H': '[H]istory'}
 
-item_name = {'H':'Hack','P':'Push','E':'Exchange','C':'Curse','F':'Fake Curse'
-                ,'L':'kill Lane.','X':'kill Xcross.','Z':'kill Zone.'}
+item_name = {'H': 'Hack', 'P': 'Push', 'E': 'Exchange', 'C': 'Curse',
+             'F': 'Fake Curse', 'L': 'kill Lane.', 'X': 'kill Xcross.', 'Z': 'kill Zone.'}
 CARD = dict()
 for i in card_name:
-    CARD[i]= 0
+    CARD[i] = 0
 for i in item_name:
-    history[i]=0
+    history[i] = 0
 notif = []
+
 
 def random_name():
     global name_possible
-    return name_possible.pop(randrange(0,len(name_possible)))
+    return name_possible.pop(randrange(0, len(name_possible)))
+
 
 def add_card():
-    global CARD,deck,card_name
-    if  len(deck) == 0 :
+    global CARD, deck, card_name
+    if len(deck) == 0:
         print("Deck is Empty")
         return False
-    x = deck.pop(randrange(0,len(deck)))
-    print("Draw >>",card_name[x])
+    x = deck.pop(randrange(0, len(deck)))
+    print("Draw >>", card_name[x])
     CARD[x] += 1
 
+
 def add_item():
-    global pos,item
-    zone = randrange(0,9)
+    global pos, item
+    zone = randrange(0, 9)
     pos_use = [''.join(i) for i in pos]
     ans = []
-    for i in range(zone//3*3,zone//3*3+3):
-        for j in range(zone%3*3,zone%3*3+3):
-            k = '%s%s'%(i,j)
+    for i in range(zone // 3 * 3, zone // 3 * 3 + 3):
+        for j in range(zone % 3 * 3, zone % 3 * 3 + 3):
+            k = '%s%s' % (i, j)
             if k in item:
                 return False
             elif k not in pos_use:
                 ans.append(k)
-    item.append(ans[randrange(0,len(ans))])
+    item.append(ans[randrange(0, len(ans))])
+
 
 def sent_item():
-    global get_item,item,notif
-    for i in get_item :
-        notif.append('I'+get_item[i][randrange(0,len(get_item[i]))])
+    global get_item, item, notif
+    for i in get_item:
+        notif.append('I' + get_item[i][randrange(0, len(get_item[i]))])
         item.remove(i)
     get_item = dict()
+
 
 def print_notif(x):
     global player
     for i in sorted(x):
         i = i.upper()
         if i[0] == 'K':
-            print("<< %s(%s) was killed >>"%(i[1],'player' if i[1] in player else 'bot'))
+            print("<< %s(%s) was killed >>" %
+                  (i[1], 'player' if i[1] in player else 'bot'))
         elif i[0] == 'F' or i[0] == 'C':
             print("<< Cursing >>")
         elif i[0] == 'U':
@@ -81,144 +126,153 @@ def print_notif(x):
         elif i[0] == 'E':
             print("<< Exchanging >>")
 
+
 def detect_zone(x):
-    x = int(x)-1
-    global pos,player,cursed,notif
+    x = int(x) - 1
+    global pos, player, cursed, notif
     zone = [False for i in range(9)]
-    in_zone =[[] for i in range(9)]
-    for i in pos :
-        in_zone[(pos[i][0]//3*3)+(pos[i][1]//3)].append(i)
+    in_zone = [[] for i in range(9)]
+    for i in pos:
+        in_zone[(pos[i][0] // 3 * 3) + (pos[i][1] // 3)].append(i)
         if i in player or i in cursed:
-            zone[(pos[i][0]//3*3)+(pos[i][1]//3)]=True
+            zone[(pos[i][0] // 3 * 3) + (pos[i][1] // 3)] = True
     ans = zone[x]
     in_ans = in_zone[x]
-    if x >=3:
-        ans = ans or zone[x-3]
-        in_ans.extend(in_zone[x-3])
-    if x <6:
-        ans = ans or zone[x+3]
-        in_ans.extend(in_zone[x+3])
-    if x%3>0:
-        ans = ans or zone[x-1]
-        in_ans.extend(in_zone[x-1])
-    if x%3<2:
-        ans = ans or zone[x+1]
-        in_ans.extend(in_zone[x+1])
+    if x >= 3:
+        ans = ans or zone[x - 3]
+        in_ans.extend(in_zone[x - 3])
+    if x < 6:
+        ans = ans or zone[x + 3]
+        in_ans.extend(in_zone[x + 3])
+    if x % 3 > 0:
+        ans = ans or zone[x - 1]
+        in_ans.extend(in_zone[x - 1])
+    if x % 3 < 2:
+        ans = ans or zone[x + 1]
+        in_ans.extend(in_zone[x + 1])
     in_ans = ''.join(sorted(in_ans))
-    print("Detecting \'%s\'"%in_ans)
-    notif.append('D'+in_ans)
+    print("Detecting \'%s\'" % in_ans)
+    notif.append('D' + in_ans)
     return ans
+
 
 def print_map(x):
     global map_size
     size = map_size
-    map_ = [[] for i in range(size*size)]
+    map_ = [[] for i in range(size * size)]
     stack = []
     for i in x:
-        map_[int(i[0])*size+int(i[1])].append(i[2])
+        map_[int(i[0]) * size + int(i[1])].append(i[2])
     for i in range(size):
-        if i %3 ==0:
-            print('-'*(size//3*4+1))
+        if i % 3 == 0:
+            print('-' * (size // 3 * 4 + 1))
         for j in range(size):
-            if j%3 == 0:
-                print('|',end='')
-            if  len(map_[i*size + j])>1:    
-                map_[i*size + j] = [ k for k in map_[i*size + j] if k !='?']
-            if len(map_[i*size + j])==0:
-                print(' ',end='')
-            elif len(map_[i*size + j])==1:
-                print(map_[i*size+j][0],end='')
-            else :
-                print(len(stack),end='')
-                stack.append(map_[i*size+j])
+            if j % 3 == 0:
+                print('|', end='')
+            if len(map_[i * size + j]) > 1:
+                map_[i * size + j] = [k for k in map_[i * size + j] if k != '?']
+            if len(map_[i * size + j]) == 0:
+                print(' ', end='')
+            elif len(map_[i * size + j]) == 1:
+                print(map_[i * size + j][0], end='')
+            else:
+                print(len(stack), end='')
+                stack.append(map_[i * size + j])
         print("|")
-    print('-'*(size//3*4+1))
+    print('-' * (size // 3 * 4 + 1))
     for i in range(len(stack)):
-        print('*%d'%i,"=",stack[i])
+        print('*%d' % i, "=", stack[i])
+
 
 def pos_to_strlist():
     ans = []
-    global pos,item
+    global pos, item
     for i in pos:
-        ans.append("%d%d"%(pos[i][0],pos[i][1])+i)
+        ans.append("%d%d" % (pos[i][0], pos[i][1]) + i)
     for i in item:
-        ans.append(i+'?')
+        ans.append(i + '?')
     return ans
 
+
 def create_bot(n):
-    global pos,bot
+    global pos, bot
     for i in range(n):
         name = random_name()
-        pos[name]=[map_size//2,map_size//2]
-        bot = '%s%s'%(bot,name)
+        pos[name] = [map_size // 2, map_size // 2]
+        bot = '%s%s' % (bot, name)
+
 
 def move_bot():
     global contorled
     ans = []
     for i in bot:
-        if i.upper() not in contorled :
-            ans.append(i+'M'+'UDLRI'[randrange(0,5)]+'_')
+        if i.upper() not in contorled:
+            ans.append(i + 'M' + 'UDLRI'[randrange(0, 5)] + '_')
     action(ans)
 
+
 def action(x):
-    global pos,map_size,bot,player,name_possible,get_item,item,contorled,cursed,history
+    global pos, map_size, bot, player, name_possible, get_item, item, contorled, cursed, history
     for i in x:
         i = i.upper()
         name = i[0]
 
         # Case Move
-        if i[1] =='M' or i[1] == 'H' or i[1]=='P':
+        if i[1] == 'M' or i[1] == 'H' or i[1] == 'P':
             if i[1] == 'H' or i[1] == 'P':
-                history[i[1]]+=1
-            if (name in pos) and (name != i[3] or (name == i[3] and (name not in contorled))):
-                if i[2]=='U':
-                    pos[name][0] -=1
-                    if pos[name][0] < 0:
-                        pos[name][0] =0
-                elif i[2]=='L':
-                    pos[name][1] -=1
-                    if pos[name][1] < 0:
-                        pos[name][1] =0
-                elif i[2]=='D':
-                    pos[name][0] +=1
-                    if pos[name][0] >= map_size:
-                        pos[name][0] = map_size-1
-                elif i[2]=='R':
-                    pos[name][1] +=1
-                    if pos[name][1] >= map_size:
-                        pos[name][1] = map_size-1
-                k = '%d%d'%(pos[name][0],pos[name][1])
-                if k in item:
-                        get_item[k] = get_item.get(k,[])+[('_' if len(i)<4 else i[3])]
-        # Case Kill
-        elif  i[1] in ['K','L','X','Z']:
-            if i[1] in ['L','X','Z']:
                 history[i[1]] += 1
-            if i[2] in bot+player:
-                bot = bot.replace(i[2],'')
+            if (name in pos) and (name != i[3] or (name == i[3] and (name not in contorled))):
+                if i[2] == 'U':
+                    pos[name][0] -= 1
+                    if pos[name][0] < 0:
+                        pos[name][0] = 0
+                elif i[2] == 'L':
+                    pos[name][1] -= 1
+                    if pos[name][1] < 0:
+                        pos[name][1] = 0
+                elif i[2] == 'D':
+                    pos[name][0] += 1
+                    if pos[name][0] >= map_size:
+                        pos[name][0] = map_size - 1
+                elif i[2] == 'R':
+                    pos[name][1] += 1
+                    if pos[name][1] >= map_size:
+                        pos[name][1] = map_size - 1
+                k = '%d%d' % (pos[name][0], pos[name][1])
+                if k in item:
+                    get_item[k] = get_item.get(
+                        k, []) + [('_' if len(i) < 4 else i[3])]
+        # Case Kill
+        elif i[1] in ['K', 'L', 'X', 'Z']:
+            if i[1] in ['L', 'X', 'Z']:
+                history[i[1]] += 1
+            if i[2] in bot + player:
+                bot = bot.replace(i[2], '')
                 del pos[i[2]]
-                notif.append('K'+i[2])
+                notif.append('K' + i[2])
                 if len(bot) == 0:
                     notif.append('-')
         # Case Exchange
         elif i[1] == 'E':
             history[i[1]] += 1
             if name != i[2]:
-                bot = bot.replace(i[2],'')
-                cursed = cursed.replace(i[2],'')
-                player = player.replace(name,'')
-                bot = "%s%s"%(bot,name)
-                player = "%s%s"%(player,i[2])
-            notif.append('E'+name+i[2])
+                bot = bot.replace(i[2], '')
+                cursed = cursed.replace(i[2], '')
+                player = player.replace(name, '')
+                bot = "%s%s" % (bot, name)
+                player = "%s%s" % (player, i[2])
+            notif.append('E' + name + i[2])
         # Case Curse
         elif i[1] == 'F' or i[1] == 'C':
             history[i[1]] += 1
             if name in bot:
-                cursed = "%s%s"%(cursed,name)
+                cursed = "%s%s" % (cursed, name)
             notif.append('C')
 
+
 class ThreadedServer(object):
-    global turn_count,N
+    global turn_count, N
+
     def __init__(self, host, port):
         self.host = host
         self.port = port
@@ -227,27 +281,28 @@ class ThreadedServer(object):
         self.sock.bind((self.host, self.port))
 
     def listen(self):
-        global player,pos
+        global player, pos
         self.sock.listen(N)
         thread_list = []
         for i in range(N):
             client, addr = self.sock.accept()
-            print("Connection from: %s"%str(addr))
+            print("Connection from: %s" % str(addr))
             client.settimeout(99999)
             name = random_name()
             client.send(name.encode('ascii'))
-            pos[name] = [map_size//2,map_size//2]
-            player = '%s%s'%(player,name)
-            thread_list.append(threading.Thread(target = self.listenToClient,args = (i,client,addr,name)))
+            pos[name] = [map_size // 2, map_size // 2]
+            player = '%s%s' % (player, name)
+            thread_list.append(threading.Thread(
+                target=self.listenToClient, args=(i, client, addr, name)))
 
         print("ALL")
-        threading.Thread(target = main).start()
+        threading.Thread(target=main).start()
         [i.start() for i in thread_list]
 
-    def listenToClient(self,t_id, client, addr,name):
-        global turn_count,N,player,bot,pos,map_size,contorled,in_turn,notif,processing,acting,thread_list
+    def listenToClient(self, t_id, client, addr, name):
+        global turn_count, N, player, bot, pos, map_size, contorled, in_turn, notif, processing, acting, thread_list
         size = 1024
-        client.send((player+' '+bot).encode('ascii'))
+        client.send((player + ' ' + bot).encode('ascii'))
         msg = ' '.join(pos_to_strlist())
         #print("sending%s : %s"%(addr,msg))
         client.send(msg.encode('ascii'))
@@ -255,7 +310,7 @@ class ThreadedServer(object):
             try:
                 msg = client.recv(size).decode('ascii')
                 if msg:
-                    if msg =='-':
+                    if msg == '-':
                         client.close()
                         N -= 1
                         if N == 0:
@@ -263,152 +318,203 @@ class ThreadedServer(object):
                             sys.exit("YOU WIN!!")
                         break
                     act = msg.split()
-                    contorled = '%s%s'%(contorled,''.join([i[0].upper() for i in act if i[1].upper() == 'M' and i[0]!=i[3]]))
-                    #if in_turn :
+                    contorled = '%s%s' % (contorled, ''.join(
+                        [i[0].upper() for i in act if i[1].upper() == 'M' and i[0] != i[3]]))
+                    # if in_turn :
                     #    print("Waiting (%d/%d)"%(turn_count+1,N))
                     [i.join() for i in thread_list]
                     turn_count += 1
-                    
 
-                    while not in_turn :
+                    while not in_turn:
                         pass
 
                     [i.join() for i in thread_list]
 
                     action(act)
-                    acting +=1
-                    while processing :
+                    acting += 1
+                    while processing:
                         pass
-                    msg = ' '.join(notif)+','+' '.join(pos_to_strlist())
+                    msg = ' '.join(notif) + ',' + ' '.join(pos_to_strlist())
                     client.send(msg.encode('ascii'))
-                    
+
                     #print("sending data(%d/%d)"%(turn_count,N))
                     turn_count -= 1
                     [i.join() for i in thread_list]
 
-                    #print("NEXT")
+                    # print("NEXT")
                 else:
                     raise error('Client disconnected')
             except:
                 client.close()
                 return False
 
+
 def main():
-    global in_turn,turn_count,N,CARD,card_name,card_used,deck,bot,player,notif,contorled,cursed,acting,processing,history,item_name
+    global in_turn, turn_count, N, CARD, card_name, card_used, deck, bot, player, notif, contorled, cursed, acting, processing, history, item_name
     while True:
         if len(bot) == 0:
             print("You Lose..")
             break
         while True:
-            print("Total Bot-Player : %d-%d"%(len(bot),N))
+            print("Total Bot-Player : %d-%d" % (len(bot), N))
             print_map(pos_to_strlist())
             print("CARD :")
-            if len(deck)> 0 :
+            if len(deck) > 0:
                 print(" - [A]dd.")
-            else :
+            else:
                 print("Deck is Empty")
             for i in sorted(CARD):
-                if CARD[i]>0:
-                    print(' -',card_name[i],'x%d'%CARD[i])
+                if CARD[i] > 0:
+                    print(' -', card_name[i], 'x%d' % CARD[i])
+            print(" - [I]nformation")
             print(" - End[.]")
-
             x = input(" -> ").upper()
             #x = 'E'
             if N == 0:
                 break
             if x == '':
                 continue
-            if x == 'A' and len(deck)>0:
+            if x == 'A' and len(deck) > 0:
                 add_card()
                 break
-            elif x == 'R' and CARD[x]>0:
-                CARD[x]-=1
+            elif x == 'R' and CARD[x] > 0:
+                CARD[x] -= 1
                 deck.extend(card_used)
                 card_used = []
                 print("Return used card to deck")
                 break
-            elif x == 'D' and CARD[x]>0:
-                CARD[x]-=1
+            elif x == 'D' and CARD[x] > 0:
+                CARD[x] -= 1
                 card_used.append(x)
                 print("Double draw")
                 add_card()
                 add_card()
-            elif x == 'U' and CARD[x]>0:
-                CARD[x]-=1
+            elif x == 'U' and CARD[x] > 0:
+                CARD[x] -= 1
                 card_used.append(x)
                 cursed = ''
                 print("Uncursed")
                 notif.append('U')
                 break
-            elif x == 'H' and CARD[x]>0:
-                CARD[x]-=1
+            elif x == 'H' and CARD[x] > 0:
+                CARD[x] -= 1
                 card_used.append(x)
                 print("History >>")
                 for i in sorted(history):
-                    if history[i]>0:
-                        print(' ',item_name[i],'x%d'%history[i])
+                    if history[i] > 0:
+                        print(' ', item_name[i], 'x%d' % history[i])
                 notif.append('H')
-            elif x[0] == 'K' and CARD['K']>0:
+            elif x[0] == 'I':
+                print(
+                    '================================================================================')
+                if len(x) == 0:
+                    print("Input your action or item that you want to know")
+                    i = input(' -> ').upper()
+                if i in ['A', 'K', 'C', 'R', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'D', 'U', 'H', '.']:
+                    if i == 'A':
+                        print('[A]dd use to add 1 card to your hand')
+                    elif i == 'K':
+                        print('[K]ill use to kill the survivals')
+                    elif i == 'C':
+                        print('[C]hain kill use to kill many players in 1 turn by type "C" and name of survivals')
+                        print('Example : cabcdefg')
+                        print('**Caution : Chaining will stop when bot was killed')
+                    elif i == 'R':
+                        print('[R]eset use to reset your deck')
+                    elif i == '1':
+                        print('Detect[1] use to scan in area 1')
+                    elif i == '2':
+                        print('Detect[2] use to scan in area 2')
+                    elif i == '3':
+                        print('Detect[3] use to scan in area 3')
+                    elif i == '4':
+                        print('Detect[4] use to scan in area 4')
+                    elif i == '5':
+                        print('Detect[5] use to scan in area 5')
+                    elif i == '6':
+                        print('Detect[6] use to scan in area 6')
+                    elif i == '7':
+                        print('Detect[7] use to scan in area 7')
+                    elif i == '8':
+                        print('Detect[8] use to scan in area 8')
+                    elif i == '9':
+                        print('Detect[9] use to scan in area 9')
+                    elif i == 'D':
+                        print('[D]ouble draw use to draw 2 cards to your hand')
+                    elif i == 'U':
+                        print('[U]ncurse use to remove all curse form the game')
+                    elif i == 'H':
+                        print('[H]istory use to check what cards which used in last turn')
+                    elif i == '.':
+                        print('End[.] use to end your turn')
+                    else:
+                        print("INPUT ERROR: please try again")
+                        continue
+                    print(
+                        '================================================================================')
+                else:
+                    print("INPUT ERROR: please try again")
+            elif x[0] == 'K' and CARD['K'] > 0:
                 x = x[1:]
-                all_ = sorted(bot+player)
-                if len(x)>0:
+                all_ = sorted(bot + player)
+                if len(x) > 0:
                     i = x[0]
                     x = x[1:]
-                else :
+                else:
                     print(all_)
                     i = input(" -> ").upper()
-                    if i == '..' :
+                    if i == '..':
                         continue
-                print("\'%s\'"%i)
+                print("\'%s\'" % i)
                 if i in [j for j in all_]:
-                    CARD['K']-=1
+                    CARD['K'] -= 1
                     card_used.append('K')
-                    action(['_K'+i])
-                    print("Kill",i)
+                    action(['_K' + i])
+                    print("Kill", i)
                     break
-                else :
+                else:
                     print("INPUT ERROR: please try again")
                     continue
-            elif x[0] == 'C' and CARD['C']>0 :
+            elif x[0] == 'C' and CARD['C'] > 0:
                 x = x[1:]
-                if x =='':
-                    print(sorted(bot+player))
+                if x == '':
+                    print(sorted(bot + player))
                     x = input(" -> ").upper()
-                    if x == '..' :
+                    if x == '..':
                         continue
-                CARD['C']-=1
+                CARD['C'] -= 1
                 card_used.append('C')
-                print("Chain kill \'%s\'"%x)
+                print("Chain kill \'%s\'" % x)
                 for i in x:
-                    if i in player :
-                        action(['_K'+i])
-                    elif i in bot :
-                        action(['_K'+i])
+                    if i in player:
+                        action(['_K' + i])
+                    elif i in bot:
+                        action(['_K' + i])
                         break
-                    else :
+                    else:
                         break
                 break
-            elif '1'<=x<='9' and CARD[x]>0:
+            elif '1' <= x <= '9' and CARD[x] > 0:
                 CARD[x] -= 1
                 card_used.append(x)
-                print("Detection %s >>"%x,"YES" if detect_zone(x) else "NO")
+                print("Detection %s >>" % x, "YES" if detect_zone(x) else "NO")
                 break
             elif x == '.':
                 break
-            else :
+            else:
                 print("INPUT ERROR: please try again")
         if N == 0:
             break
         for i in history:
-            history[i] =0 
+            history[i] = 0
         in_turn = True
-        print("Waiting")
-        #print("Waiting (%d/%d)"%(turn_count,N))
+        print("Waiting for player")
+        clearscreen()
 
-        while turn_count < N :
+        while turn_count < N:
             pass
 
-        while acting < N :
+        while acting < N:
             pass
         acting = 0
         move_bot()
@@ -426,11 +532,9 @@ def main():
         print_notif(notif)
         notif = []
 
-
-print("HOST name is \'%s\'"%socket.gethostname())
+print("Welcome good hunter.")
 N = int(input("Number of Player = "))
-#N = 1
-create_bot(N+1)
+create_bot(N + 1)
 print("Waiting for Player")
 port = 9999
-ThreadedServer('',port).listen()
+ThreadedServer('', port).listen()
