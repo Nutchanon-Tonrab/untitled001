@@ -1,7 +1,11 @@
 import socket
 import time
 import os
+import threading
 from random import randrange
+# import winsound
+
+xyz = 0
 
 
 def print_notif(x):
@@ -10,7 +14,16 @@ def print_notif(x):
         i = i.upper()
         if i[0] == 'K':
             if name == i[1]:
-                print("You die..")
+                clearscreen()
+                print("||    ||  |||||||||  ||     ||    ||||     ||  |||||||")
+                print(" ||  ||   ||     ||  ||     ||    || ||    ||  ||")
+                print("  ||||    ||     ||  ||     ||    ||  ||   ||  ||")
+                print("   ||     ||     ||  ||     ||    ||   ||  ||  |||||||")
+                print("   ||     ||     ||  ||     ||    ||  ||   ||  ||")
+                print("   ||     ||     ||  ||     ||    || ||    ||  ||")
+                print(
+                    "   ||     |||||||||  |||||||||    ||||     ||  |||||||  ||  ||  ||")
+                # sound2()
                 s.send("-".encode('ascii'))
                 s.close()
                 return False
@@ -54,7 +67,8 @@ def print_map(x):
             if j % 3 == 0:
                 print('|', end='')
             if len(map_[i * size + j]) > 1:
-                map_[i * size + j] = [k for k in map_[i * size + j] if k != '?']
+                map_[
+                    i * size + j] = [k for k in map_[i * size + j] if k != '?']
             if len(map_[i * size + j]) == 0:
                 print(' ', end='')
             elif len(map_[i * size + j]) == 1:
@@ -67,11 +81,14 @@ def print_map(x):
     print('-' * (size // 3 * 4 + 1))
     for i in range(len(stack)):
         print('*%d' % i, "=", stack[i])
+
+
 def clearscreen():
     try:
         os.system('clear')
     except:
         os.system('cls')
+
 
 def add_item():
     global item_name, ITEM
@@ -92,36 +109,74 @@ size = 2048
 item_name = {'H': '[H]ack', 'P': '[P]ush', 'E': '[E]xchange', 'C': '[C]urse',
              'F': '[F]ake Curse', 'L': 'kill [L]ane.', 'X': 'kill [X]cross.', 'Z': 'kill [Z]one.'}
 ITEM = dict()
-for flash in range(3):
-    print('     ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.3)
-    clearscreen()
-    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('    ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.05)
-    clearscreen()
-    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('    ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.05)
-    clearscreen()
+
+
+# def sound():
+#     global xyz
+#     xyz += 1
+#     winsound.PlaySound('dang.wav', winsound.SND_ALIAS)
+
+
+# def sound2():
+#     winsound.PlaySound('dang2.wav', winsound.SND_ALIAS)
+
+
+def flsh():
+    global xyz
+    for flash in range(3):
+        print(
+            '     ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.3)
+        clearscreen()
+        print(
+            '    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '    ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.05)
+        clearscreen()
+        print(
+            '    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '    ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.05)
+        clearscreen()
+        xyz += 1
 for i in item_name:
     ITEM[i] = 0
+flsh()
+add_item()
 while True:
     try:
         host = input("Connect to HOST = ")
@@ -134,19 +189,35 @@ while True:
         print("Cant Connnect to Server")
 
 # Game Start
-name = s.recv(4).decode('ascii')
+while True:
+        try:
+            name = s.recv(4).decode('ascii')
+            break
+        except:
+            pass
 print("Your Name Is \'%s\'" % name)
 print("WAITING for other player")
-player, bot = s.recv(1024).decode('ascii').split()
+while True:
+        try:
+            player, bot = s.recv(1024).decode('ascii').split()
+            break
+        except:
+            pass
 print(player)
-msg = s.recv(2048).decode('ascii')
+while True:
+        try:
+            msg = s.recv(2048).decode('ascii')
+            break
+        except:
+            pass
 strmap = msg
-print_map(msg.split())
+# print_map(msg.split())
 
 # loop for each turn
 while True:
     msg = '...'
     while True:
+        print_map(strmap.split())
         print("[M]ove.: [U]p,[D]own,[L]eft,[R]ight")
         for i in sorted(ITEM):
             if ITEM[i] > 0:
@@ -325,39 +396,157 @@ while True:
                 else:
                     print("INPUT ERROR: please try again")
                     continue
+            # elif i == '+':
+            #     clearscreen()
+            #     if len(x) == 0:
+            #         x = input('Adding -> ').upper()
+            #         if x == '..':
+            #             continue
+            #     if x in ITEM :
+            #         ITEM[x] += 1
+            #         print('<< Adding',item_name[x],'>>')
             elif i == 'I':
+                clearscreen()
                 print('================================================================================')
                 if len(x) == 0:
                     print("Input your action or item that you want to know")
                     x = input(' -> ').upper()
+                    if x == '..':
+                        continue
                 if x[0] in ['M', 'H', 'P', 'E', 'C', 'F', 'L', 'X', 'Z', '.']:
                     if x == 'M':
                         print('[M]ove use to move your character')
                     elif x == 'H':
-                        print('[H]ack use to control bot or yourself to gain extra move')
-                        print('And when you control bot to pick up an item you will recive that item')
+                        print(' #H              T')
+                        print('   &            ()O')
+                        print('   *A_.-' ' -._%A')
+                        print("   ,', ~'` ( .'`.")
+                        print("  ( ~'_ , .'(  > )")
+                        print(" ( . ' (  `__. <  )")
+                        print("  ( ` ..  '_   . ')")
+                        print("   `(_( ( ' ` '. )")
+                        print("      @`-.__. '=/")
+                        print("    A#    `._`='@")
+                        print('    %        \\\  #')
+                        print('  H$             !')
+                        print(' @                G#')
+                        print('?                   ?')
+                        print(
+                            '[H]ack use to control bot or yourself to gain extra move')
+                        print(
+                            'And when you control bot to pick up an item you will recive that item')
                     elif x == 'P':
+                        print('     @        @')
+                        print('      @   @@   @@')
+                        print('    @@      @    @')
+                        print('@@@@@        @    @')
+                        print('           @@     @')
+                        print('@@@@@@@@@@@      @')
+                        print('               @@')
+                        print('        @@@@@@@   _O_')
+                        print('@@@@@@@@@       (=| |')
+                        print('                  |_|')
+                        print('@@@@@@@@@@')
+                        print('         @@@@@@')
+                        print('               @')
+                        print('                @')
                         print('[P]ush use to push player or bot (0-8 unit)')
                     elif x == 'E':
-                        print('[E]xchange use to swap your with bot or yourself')
+                        print(
+                            '[E]xchange use to swap your with bot or yourself')
                     elif x == 'C':
-                        print('[C]urse use to make bot rise "player" instead "bot" when detected')
+                        print('    @@@       @@@')
+                        print('   @@PP       bb@@')
+                        print('   @PPP       bbb@')
+                        print('   @PPP       bbb@')
+                        print('   @PPP   /   bbb@')
+                        print('    @@@  /==  @@@')
+                        print('  @@PPP  \==  bbb@@')
+                        print(' @@PPPP   \   bbbb@@')
+                        print(' @PPPPP       bbbbb@')
+                        print(' @PPPPP       bbbbb@')
+                        print(' @PPPPP       bbbbb@')
+                        print('  @PPPP       bbbb@')
+                        print('   @@PP       bb@@')
+                        print('    @@@       @@@')
+                        print(
+                            '[C]urse use to make bot rise "player" instead "bot" when detected')
                     elif x == 'F':
-                        print('[F]ake Curse use to rise the notification of [C]urse but dont have any effect')
+                        print('      ______ _')
+                        print('     /  _/ /( )___')
+                        print('    _/ // __//(_ <')
+                        print('   /___/\__/ /___/')
+                        print('         ___')
+                        print('        / _ |')
+                        print('       / __ |')
+                        print('      /_/ |_|')
+                        print('  ______')
+                        print(' /_  __/______ ____')
+                        print('  / / / __/ _ `/ _ \ ')
+                        print(' /_/ /_/  \_,_/ .__/')
+                        print('             /_/')
+                        print('')
+                        print(
+                            '[F]ake Curse use to rise the notification of [C]urse but dont have any effect')
                     elif x == 'L':
-                        print('Kill [L]ane use to kill 1 bot in your direction')
+                        print('   %   _______')
+                        print('   %   |     |')
+                        print('   %  (| | | |)')
+                        print('   %   |_____|')
+                        print('   %     [_] ')
+                        print('%%%%%%%%%%%%%%%%%%%%%')
+                        print('   %      |')
+                        print('   %      V')
+                        print('   %')
+                        print('   %   .-"""-.')
+                        print('   %  / _   _ \ ')
+                        print("   %  ](_' `_)[")
+                        print("   %  `-. * ,-'")
+                        print('   %    |---|')
+                        print(
+                            'Kill [L]ane use to kill 1 bot in your direction')
                     elif x == 'X':
-                        print('Kill [X]cross use to kill 1 bot in your cross direction')
+                        print('%%     _______     %%')
+                        print('  %    |     |    %')
+                        print('   %% (| | | |) %%')
+                        print('     % |_____| %')
+                        print('      %  [_]  %')
+                        print('       %%   %%')
+                        print('         %|%')
+                        print('         %V%')
+                        print('       %%   %%')
+                        print('      %.-"""-.%')
+                        print('     %/ _   _ \%')
+                        print("   %% ](_' `_)[ %%")
+                        print("  %   `-. * ,-'   %")
+                        print('%%      |---|      %%')
+                        print(
+                            'Kill [X]cross use to kill 1 bot in your cross direction')
                     elif x == 'Z':
+                        print('   |%%%_______%%%|')
+                        print('   |%%%|     |%%%|')
+                        print('   |%%(| | | |)%%|')
+                        print('   |%%%|_____|%%%|')
+                        print('   |%%%%%[_]%%%%%|')
+                        print('   |%%%%%%%%%%%%%|')
+                        print('   |      |      |')
+                        print('   |      V      |')
+                        print('   |             |')
+                        print('   |   .-"""-.   |')
+                        print('   |  / _   _ \  |')
+                        print("   |  ](_' `_)[  |")
+                        print("   |  `-. * ,-'  |")
+                        print('   |    |---|    |')
                         print('Kill [Z]one use to kill 1 bot in your zone')
                     elif x == '.':
                         print('End[.] use to end your turn')
                     else:
                         print("INPUT ERROR: please try again")
                         continue
-                    print('================================================================================')
+                    print(
+                        '================================================================================')
                 else:
-                    print("INPUT ERROR: please try again")
+                    print("INPUT ERROR: please try again.")
             elif i == '.':
                 break
             else:
@@ -373,13 +562,13 @@ while True:
         except:
             pass
     clearscreen()
-    # print("\'%s\'"%msg)
 
     notif, strmap = msg.split(',')
     notif = notif.split()
     if '-' in notif:
         print("YOU WIN!!")
         s.close()
+        time.sleep(3)
         break
     if print_notif(notif) == False:
         break

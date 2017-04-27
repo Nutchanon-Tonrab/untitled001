@@ -3,7 +3,9 @@ import threading
 import sys
 import time
 import os
+# import winsound
 from random import randrange
+xyz = 0
 
 
 def clearscreen():
@@ -12,36 +14,69 @@ def clearscreen():
     except:
         os.system('cls')
 
-# set variable
-for flash in range(3):
-    print('     ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.3)
-    clearscreen()
-    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('    ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.05)
-    clearscreen()
-    print('    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
-    print('     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
-    print('     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
-    print('      ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
-    print('     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
-    print('    ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
-    print('     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
-    time.sleep(0.05)
-    clearscreen()
 
+# def sound2():
+#     winsound.PlaySound('dang2.wav', winsound.SND_ALIAS)
+
+
+# def sound():
+#     global xyz
+#     xyz += 1
+#     winsound.PlaySound('dang.wav', winsound.SND_ALIAS)
+
+
+def flsh():
+    global xyz
+    for flash in range(3):
+        print(
+            '     ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.3)
+        clearscreen()
+        print(
+            '    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '    ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.05)
+        clearscreen()
+        print(
+            '    ||     ||  |||      ||  ||||||||||  ||  ||||||||||  ||       |||||||||')
+        print(
+            '     ||     ||  ||||     ||      ||      ||      ||      ||       ||       ')
+        print(
+            '     ||     ||  ||  ||   ||      ||      ||      ||      ||       ||       ')
+        print(
+            '      ||     ||  ||   ||  ||      ||      ||      ||      ||       |||||||||')
+        print(
+            '     ||     ||  ||    || ||      ||      ||      ||      ||       ||       ')
+        print(
+            '    ||     ||  ||     ||||      ||      ||      ||      ||       ||       ')
+        print(
+            '     |||||||||  ||      |||      ||      ||      ||      |||||||  |||||||||')
+        time.sleep(0.05)
+        clearscreen()
+        xyz += 1
 
 turn_count = 0
 name_possible = [i for i in'ABCDEFGHIJKLMNOPQRSTUVWXYZ']
@@ -170,7 +205,8 @@ def print_map(x):
             if j % 3 == 0:
                 print('|', end='')
             if len(map_[i * size + j]) > 1:
-                map_[i * size + j] = [k for k in map_[i * size + j] if k != '?']
+                map_[
+                    i * size + j] = [k for k in map_[i * size + j] if k != '?']
             if len(map_[i * size + j]) == 0:
                 print(' ', end='')
             elif len(map_[i * size + j]) == 1:
@@ -292,17 +328,16 @@ class ThreadedServer(object):
             client.send(name.encode('ascii'))
             pos[name] = [map_size // 2, map_size // 2]
             player = '%s%s' % (player, name)
-            thread_list.append(threading.Thread(
-                target=self.listenToClient, args=(i, client, addr, name)))
-
-        print("ALL")
+            thread_list.append(
+                threading.Thread(target=self.listenToClient, args=(i, client, addr, name)))
         threading.Thread(target=main).start()
         [i.start() for i in thread_list]
 
     def listenToClient(self, t_id, client, addr, name):
         global turn_count, N, player, bot, pos, map_size, contorled, in_turn, notif, processing, acting, thread_list
         size = 1024
-        client.send((player + ' ' + bot).encode('ascii'))
+        client.send((player + ' ' + bot + '&').encode('ascii'))
+        [i.join() for i in thread_list]
         msg = ' '.join(pos_to_strlist())
         #print("sending%s : %s"%(addr,msg))
         client.send(msg.encode('ascii'))
@@ -319,7 +354,7 @@ class ThreadedServer(object):
                         break
                     act = msg.split()
                     contorled = '%s%s' % (contorled, ''.join(
-                        [i[0].upper() for i in act if i[1].upper() == 'M' and i[0] != i[3]]))
+                        [i[0].upper() for i in act if (i[1].upper() == 'M' and i[0] != i[3])]))
                     # if in_turn :
                     #    print("Waiting (%d/%d)"%(turn_count+1,N))
                     [i.join() for i in thread_list]
@@ -348,12 +383,32 @@ class ThreadedServer(object):
                 client.close()
                 return False
 
-
+def detect_ascii():
+    print('      OOOO')
+    print('    O o  o O')
+    print('  Oo        oO')
+    print(' Oo    ??    oO')
+    print(' Oo    ??    oO')
+    print('  Oo        oO')
+    print('    O o  o O O')
+    print('      OOOO O  O')
+    print('             O  O')
+    print('              O  O')
+    print('               O  O')
+    print('                OOOO')
 def main():
     global in_turn, turn_count, N, CARD, card_name, card_used, deck, bot, player, notif, contorled, cursed, acting, processing, history, item_name
     while True:
         if len(bot) == 0:
-            print("You Lose..")
+            clearscreen()
+            print("||    ||  |||||||||  ||     ||    ||       |||||||||  |||||||  |||||||")
+            print(" ||  ||   ||     ||  ||     ||    ||       ||     ||  ||       ||")
+            print("  ||||    ||     ||  ||     ||    ||       ||     ||  ||       ||")
+            print("   ||     ||     ||  ||     ||    ||       ||     ||  |||||||  |||||||")
+            print("   ||     ||     ||  ||     ||    ||       ||     ||       ||  ||")
+            print("   ||     ||     ||  ||     ||    ||       ||     ||       ||  ||")
+            print("   ||     |||||||||  |||||||||    |||||||  |||||||||  |||||||  |||||||")
+            # sound2()
             break
         while True:
             print("Total Bot-Player : %d-%d" % (len(bot), N))
@@ -369,7 +424,7 @@ def main():
             print(" - [I]nformation")
             print(" - End[.]")
             x = input(" -> ").upper()
-            #x = 'E'
+            print(x[0],x[0] == 'I')
             if N == 0:
                 break
             if x == '':
@@ -404,51 +459,168 @@ def main():
                     if history[i] > 0:
                         print(' ', item_name[i], 'x%d' % history[i])
                 notif.append('H')
+            elif x[0] == '+':
+                clearscreen()
+                if len(x) > 1:
+                    i = x[1:]
+                    x = x[0]
+                else:
+                    x = input('Adding -> ').upper()
+                    if i == '..':
+                        continue
+                if i in CARD :
+                    CARD[i] += 1
+                    print('<< Adding',card_name[i],'>>')
             elif x[0] == 'I':
-                print(
-                    '================================================================================')
-                if len(x) == 0:
+                clearscreen()
+                print('================================================================================')
+                # print(len(x))
+                if len(x) > 1:
+                    i = x[1:]
+                    x = x[0]
+                else:
                     print("Input your action or item that you want to know")
                     i = input(' -> ').upper()
+                    if i == '..':
+                        continue
                 if i in ['A', 'K', 'C', 'R', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'D', 'U', 'H', '.']:
                     if i == 'A':
+                        print('    |*************|')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |   CARD +1   |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |             |')
+                        print('    |*************|')
                         print('[A]dd use to add 1 card to your hand')
                     elif i == 'K':
+                        print('          [ ]')
+                        print('          | |')
+                        print('       ___| |___')
+                        print('         |***|')
+                        print('         |___|  ')
+                        print('        /     \ ')
+                        print('       | () () |')
+                        print('        \  ^  /')
+                        print('         \|||/')
+                        print('         |***|')
+                        print('         |***|')
+                        print('         |***|')
+                        print('         \***/ ')
+                        print('          \ /')
+                        print('           V')
                         print('[K]ill use to kill the survivals')
                     elif i == 'C':
-                        print('[C]hain kill use to kill many players in 1 turn by type "C" and name of survivals')
+                        print('@@@                 @@@')
+                        print('   @               @')
+                        print('    @             @')
+                        print('    @             @')
+                        print('   @               @')
+                        print('  @                 @')
+                        print('  @@@._           @@@')
+                        print('     @_))=*_   _.@')
+                        print(' #1  @     *=((_=@ #2')
+                        print('     @           @')
+                        print('     @           @')
+                        print('     @           @')
+                        print('    @             @')
+                        print('@@@@@             @@@@@')
+                        print(
+                            '[C]hain kill use to kill many players in 1 turn by type "C" and name of survivals')
                         print('Example : cabcdefg')
-                        print('**Caution : Chaining will stop when bot was killed')
+                        print(
+                            '**Caution : Chaining will stop when bot was killed')
                     elif i == 'R':
+                        print('           ====')
+                        print('                ==')
+                        print('                  ==')
+                        print('  *     *******     =')
+                        print(' ***    *#####*      =')
+                        print('*****   *#####*      =')
+                        print('  =     *#####*      =')
+                        print('   =    *#####*     =')
+                        print('   ==   *******   ==')
+                        print('    ==           ==')
+                        print('       ==      ==')
+                        print('          ====')
                         print('[R]eset use to reset your deck')
                     elif i == '1':
+                        detect_ascii()
                         print('Detect[1] use to scan in area 1')
                     elif i == '2':
+                        detect_ascii()
                         print('Detect[2] use to scan in area 2')
                     elif i == '3':
+                        detect_ascii()
                         print('Detect[3] use to scan in area 3')
                     elif i == '4':
+                        detect_ascii()
                         print('Detect[4] use to scan in area 4')
                     elif i == '5':
+                        detect_ascii()
                         print('Detect[5] use to scan in area 5')
                     elif i == '6':
+                        detect_ascii()
                         print('Detect[6] use to scan in area 6')
                     elif i == '7':
+                        detect_ascii()
                         print('Detect[7] use to scan in area 7')
                     elif i == '8':
+                        detect_ascii()
                         print('Detect[8] use to scan in area 8')
                     elif i == '9':
+                        detect_ascii()
                         print('Detect[9] use to scan in area 9')
                     elif i == 'D':
-                        print('[D]ouble draw use to draw 2 cards to your hand')
+                        print('        **************')
+                        print(' @@@@@@@*            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      *            *')
+                        print(' @      **************')
+                        print(' @@@@@@@@@@@@@@')
+                        print('[D]ouble draw use to draw 2 cards form your deck')
                     elif i == 'U':
+                        print('   \ \          / /')
+                        print('    \ \@       / /')
+                        print('    @\ \      / /@@')
+                        print('    @P\ \    / /bb@')
+                        print('    @PP\ \  / /bbb@')
+                        print('    @PPP\ \/ / bbb@')
+                        print('     @@@ \  /  @@@')
+                        print('   @@PPP /  \  bbb@@')
+                        print('  @@PPPP/ /\ \ bbbb@@')
+                        print('  @PPPP/ /  \ \\bbbbb@')
+                        print('  @PPP/ /    \ \\bbbb@')
+                        print('  @PP/ /      \ \\bbb@')
+                        print('  @P/ /P       \ \\bb@')
+                        print('   / /          \ \ ')
                         print('[U]ncurse use to remove all curse form the game')
                     elif i == 'H':
+                        print('     __..._   _...__')
+                        print(' .. "      `Y`      "')
+                        print('            | ')
+                        print(' \ Searching|')
+                        print(' \\\  History|')
+                        print(' \\\\ _..   .|.   .._ /')
+                        print('  \\\`_..   .Y.   .._`/')
+                        print('   '+'`               `')
                         print('[H]istory use to check what cards which used in last turn')
                     elif i == '.':
                         print('End[.] use to end your turn')
                     else:
-                        print("INPUT ERROR: please try again")
+                        print("INPUT ERROR: please try again..")
                         continue
                     print(
                         '================================================================================')
@@ -509,7 +681,6 @@ def main():
             history[i] = 0
         in_turn = True
         print("Waiting for player")
-        clearscreen()
 
         while turn_count < N:
             pass
@@ -524,15 +695,16 @@ def main():
 
         while turn_count > 0:
             pass
-
+        clearscreen()
         in_turn = False
         processing = True
         contorled = ''
         print("NEXT")
         print_notif(notif)
         notif = []
-
-print("Welcome good hunter.")
+flsh()
+print("Welcome good officer.")
+print("Your ip is : %s" % (socket.gethostbyname(socket.gethostname())))
 N = int(input("Number of Player = "))
 create_bot(N + 1)
 print("Waiting for Player")
